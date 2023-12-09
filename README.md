@@ -3,6 +3,8 @@
 This is a simple offline password manager application built using Python and the Tkinter library. The app allows users to securely store, view, update, generate random passwords and delete passwords for various services. Passwords are encrypted using the Fernet symmetric encryption algorithm, and a password history is maintained for each entry. This app is an enhancement on ALL the password manager apps out there because it completely offline and nothing is sent/stored on the cloud. 
 ### **This app was built because my mom always keeps forgetting her passwords and always needs help resetting them 😊.**
 
+### Here's a screenshot of the app: <br/>![screenshot](Screenshot.png)
+
 ## Prerequisites
 
 - Python 3.x
