@@ -108,6 +108,8 @@ class PasswordManagerApp:
         tk.Button(master, text="View Password", command=self.view_password, font=("Helvetica", 12)).grid(row=2, column=1, pady=10, sticky="nsew")
         tk.Button(master, text="Delete Password", command=self.delete_password_prompt, font=("Helvetica", 12)).grid(row=2, column=2, pady=10, sticky="nsew")
         tk.Button(master, text="Generate Password", command=self.generate_password, font=("Helvetica", 12)).grid(row=2, column=4, pady=10, sticky="nsew")
+        tk.Button(master, text="Password History", command=self.show_password_history, font=("Helvetica", 12)).grid(row=2, column=5, pady=10, sticky="nsew")
+        tk.Button(master, text="Update Password", command=self.update_password, font=("Helvetica", 12)).grid(row=2, column=3, pady=10, sticky="nsew")
 
         # Responsive button layout
         for i in range(6):
@@ -242,6 +244,87 @@ class PasswordManagerApp:
 
         password = ''.join(secrets.choice(chars) for _ in range(length))
         return password
+
+    def update_password(self):
+        # Get the selected item from the Treeview
+        selected_item = self.tree.selection()
+        if not selected_item:
+            messagebox.showwarning("Warning", "Please select a password to update.")
+            return
+
+        # Get the ID of the selected password
+        password_id = self.tree.item(selected_item, "values")[0]
+
+        # Get the current encrypted password from the database
+        cursor.execute("SELECT password FROM passwords WHERE id=?", (password_id,))
+        current_encrypted_password = cursor.fetchone()[0]
+
+        # Ask the user for the new password
+        new_password = simpledialog.askstring("Update Password", "Enter the new password:")
+        if new_password:
+            # Encrypt and update the password in the database
+            new_encrypted_password = encrypt_data(new_password)
+            cursor.execute("UPDATE passwords SET password=? WHERE id=?", (new_encrypted_password, password_id))
+            conn.commit()
+
+            # Save the previous and new password to history
+            # history_cursor.
+            cursor.execute("INSERT INTO password_history (password_id, password) VALUES (?, ?)",
+                                (password_id, current_encrypted_password))
+            # history_cursor.
+            cursor.execute("INSERT INTO password_history (password_id, password) VALUES (?, ?)",
+                                (password_id, new_encrypted_password))
+            # history_conn.
+            conn.commit()
+
+            messagebox.showinfo("Success", "Password updated successfully!")
+            # Refresh the view after updating the password
+            self.view_passwords()
+
+    def show_password_history(self):
+        # Fetch password history from the database
+        password_id = self.get_selected_password_id()
+        if password_id is not None:
+            # history_cursor.
+            cursor.execute("SELECT timestamp, password FROM password_history WHERE password_id=? ORDER BY timestamp DESC",
+                                   (password_id,))
+            history = cursor.fetchall() #history_cursor.fetchall()
+
+            # Display history in a new window
+            history_window = tk.Toplevel(self.master)
+            history_window.title("Password History")
+
+            # Treeview to display history
+            tree = ttk.Treeview(history_window, columns=("Timestamp", "Password"),
+                                show="headings", selectmode="browse")
+            tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+
+            # Configure column headings
+            tree.heading("Timestamp", text="Timestamp")
+            tree.heading("Password", text="Password")
+
+            # Add vertical scrollbar
+            scrollbar = ttk.Scrollbar(history_window, orient="vertical", command=tree.yview)
+            scrollbar.grid(row=1, column=1, sticky="ns")
+            tree.configure(yscrollcommand=scrollbar.set)
+
+            # Responsive layout
+            history_window.grid_columnconfigure(0, weight=1)
+            history_window.grid_rowconfigure(1, weight=1)
+
+            # Populate the Treeview with history
+            for entry in history:
+                decrypted_password = decrypt_data(entry[1])
+                tree.insert("", "end", values=(entry[0], decrypted_password))
+
+    def get_selected_password_id(self):
+        selected_item = self.tree.selection()
+        if not selected_item:
+            messagebox.showwarning("Warning", "Please select a password.")
+            return None
+
+        # Get the ID of the selected password
+        return self.tree.item(selected_item, "values")[0]
 
 
 if __name__ == "__main__":
