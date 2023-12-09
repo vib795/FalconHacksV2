@@ -12,3 +12,5 @@ venv/lib64/python3.10
 venv/lib/python3.10
 venv/
 .git
+password-manager.spec
+build/**/**

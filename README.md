@@ -22,7 +22,7 @@ This is a simple offline password manager application built using Python and the
 
 3. Run the script
     ```bash
-    python password_manager.py
+    python password-manager.py
     ```
 ## Features
 
@@ -43,6 +43,78 @@ This is a simple offline password manager application built using Python and the
 ## Security
 - Passwords are stored in an encrypted format using the Fernet encryption algorithm.
 - Password changes are tracked in a separate history database.
+
+# OPTIONAL
+## Create Standalone Executable (Windows)
+To create a standalone executable (.exe) file using PyInstaller, follow these steps:
+- Install PyInstaller
+```bash
+cd FalconHacksV2
+```
+
+- Run PyInstaller
+```bash
+pyinstaller --onefile --noconsole password-manager.py
+```
+
+The executable file will be generated in the dist directory.
+
+### Test the executable
+Navigate to the dist directory and run the generated executable.
+```bash
+cd dist
+password-manager.exe
+```
+
+NOTE: This is on a Windows machine.
+
+## Create a .app/dmg file for MacOS
+1. Install Required Dependencies: <br/>
+Ensure that you have the necessary dependencies installed on your development machine:
+```bash
+pip install -r requirements.txt
+```
+2. Package the App<br/>
+Install py2app, a tool for building standalone Mac applications:
+```bash
+pip install py2app
+```
+
+3. Navigate to the directory containing your `password-manager.py`
+
+4. Run the following command to create a standalone .app bundle:
+```bash
+py2applet --make-setup password-manager.py
+python setup.py py2app
+```
+This will generate a dist directory containing the .app bundle.
+
+5. Create a DMG File: <br/>
+Install `create-dmg`, a tool for creating DMG files:
+```bash
+npm install -g create-dmg
+```
+
+6. Navigate to the `dist` directory:
+```bash
+cd dist
+```
+
+7. Run the following command to create a DMG file:
+```bash
+create-dmg 'Password Manager App.app' --overwrite --dmg-title='Password Manager App'
+```
+Adjust the `--dmg-title` parameter according to your application's name.
+
+8. After the command completes, you will find the generated DMG file in the `dist` directory.
+
+9. Test the Application:<br/>
+- Mount the DMG file and drag the application to the Applications folder.
+- Launch the application from the Applications folder to ensure it works correctly.
+
+10. Distribute the DMG File<br/>
+- You can now distribute the DMG file to users. They can download the DMG file, mount it, and then drag the application to their Applications folder.
+
 
 ### Contributing
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
