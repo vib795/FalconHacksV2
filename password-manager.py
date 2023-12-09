@@ -107,6 +107,7 @@ class PasswordManagerApp:
         tk.Button(master, text="Add Password", command=self.add_password, font=("Helvetica", 12)).grid(row=2, column=0, pady=10, sticky="nsew")
         tk.Button(master, text="View Password", command=self.view_password, font=("Helvetica", 12)).grid(row=2, column=1, pady=10, sticky="nsew")
         tk.Button(master, text="Delete Password", command=self.delete_password_prompt, font=("Helvetica", 12)).grid(row=2, column=2, pady=10, sticky="nsew")
+        tk.Button(master, text="Generate Password", command=self.generate_password, font=("Helvetica", 12)).grid(row=2, column=4, pady=10, sticky="nsew")
 
         # Responsive button layout
         for i in range(6):
@@ -205,6 +206,42 @@ class PasswordManagerApp:
             messagebox.showinfo("Success", f"Password with ID {password_id} deleted successfully!")
             # Refresh the view after deletion
             self.view_passwords()
+
+    def generate_password(self):
+        length = simpledialog.askinteger("Password Generator", "Enter password length:")
+        if length:
+            complexity = simpledialog.askstring("Password Generator", "Enter password complexity (low, medium, high):")
+            if complexity in ['low', 'medium', 'high']:
+                password = self.generate_random_password(length, complexity)
+                
+                # Display the generated password in a separate window
+                generated_password_window = tk.Toplevel(self.master)
+                generated_password_window.title("Generated Password")
+
+                # Text widget to display the generated password
+                password_display = tk.Text(generated_password_window, height=1, width=30)
+                password_display.insert(tk.END, password)
+                password_display.pack(pady=10)
+
+                # Button to close the window
+                tk.Button(generated_password_window, text="Close", command=generated_password_window.destroy, font=("Helvetica", 12)).pack(pady=10)
+            else:
+                messagebox.showwarning("Warning", "Invalid complexity level. Please choose low, medium, or high.")
+
+    def generate_random_password(self, length, complexity):
+        chars_low = "abcdefghijklmnopqrstuvwxyz"
+        chars_medium = chars_low + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        chars_high = chars_medium + "0123456789!@#$%^&*()_-+=<>?/"
+
+        if complexity == 'low':
+            chars = chars_low
+        elif complexity == 'medium':
+            chars = chars_medium
+        else:
+            chars = chars_high
+
+        password = ''.join(secrets.choice(chars) for _ in range(length))
+        return password
 
 
 if __name__ == "__main__":
