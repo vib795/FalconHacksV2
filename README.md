@@ -13,7 +13,7 @@ This is a simple offline password manager application built using Python and the
 - sqlite3 library
 - pyperclip library
 
-## Installationj
+## Installation
 
 1. Clone the repository or download the script.
 2. Install the required dependencies:
