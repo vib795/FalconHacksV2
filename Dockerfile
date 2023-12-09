@@ -11,6 +11,7 @@ RUN apt-get update && \
     libglib2.0-0 \
     libgtk-3-0 \
     libnotify-dev \
+    xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
@@ -23,7 +24,7 @@ COPY . /app/
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Set environment variables
-ENV DISPLAY=:0
+ENV DISPLAY=:99
 
-# Run the script when the container launches
-CMD ["python3", "password-manager.py"]
+# Run the script using xvfb
+CMD ["xvfb-run", "python3", "password-manager.py"]
