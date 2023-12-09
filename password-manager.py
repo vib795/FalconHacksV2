@@ -41,3 +41,30 @@ def encrypt_data(data):
 
 def decrypt_data(data):
     return cipher_suite.decrypt(data).decode()
+
+def save_password(service, username, password):
+    encrypted_password = encrypt_data(password)
+    cursor.execute("INSERT INTO passwords (service, username, password) VALUES (?, ?, ?)",
+                   (service, username, encrypted_password))
+    conn.commit()
+
+    # Save to history
+    password_id = cursor.lastrowid
+    cursor.execute("INSERT INTO password_history (password_id, password) VALUES (?, ?)",
+                           (password_id, encrypted_password))
+    conn.commit()
+
+def get_passwords():
+    cursor.execute("SELECT * FROM passwords")
+    return cursor.fetchall()
+
+def delete_password(password_id):
+    # Save to history before deleting
+    cursor.execute("SELECT password FROM passwords WHERE id=?", (password_id,))
+    encrypted_password = cursor.fetchone()[0]
+    cursor.execute("INSERT INTO password_history (password_id, password) VALUES (?, ?)",
+                           (password_id, encrypted_password))
+    conn.commit()
+
+    cursor.execute("DELETE FROM passwords WHERE id=?", (password_id,))
+    conn.commit()
