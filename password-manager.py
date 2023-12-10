@@ -5,7 +5,16 @@ import sqlite3
 import secrets
 import os
 import pyperclip
-import logging as logger
+import logging
+
+logging.basicConfig(level=logging.DEBUG, 
+                    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                    handlers=[
+                        logging.StreamHandler(),
+                        logging.FileHandler('logFile.log')
+                    ])
+
+logger = logging.getLogger(__name__)
 
 try:
     key_file = "encryption_key.key"
