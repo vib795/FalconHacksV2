@@ -105,11 +105,13 @@ def delete_password(password_id):
         conn.commit()
     except Exception as e:
         logger.error(f"An error occurred during password delete for {password_id}. Error occurred in updating history of the {password_id}. {str(e)}")
+        raise Exception
     try:
         cursor.execute("DELETE FROM passwords WHERE id=?", (password_id,))
         conn.commit()
     except Exception as e:
         logger.error(f"An error occurred in deleting password from the DB. {str(e)}")
+        raise Exception
 
 class PasswordManagerApp:
     def __init__(self, master):
@@ -230,7 +232,6 @@ class PasswordManagerApp:
             # Get the selected item from the Treeview
             selected_item = self.tree.selection()
             if not selected_item:
-                # messagebox.showinfo(message="Welcome to your personal Password Manager!!")
                 return
 
             # Get the ID of the selected password
@@ -355,11 +356,10 @@ class PasswordManagerApp:
             # Fetch password history from the database
             password_id = self.get_selected_password_id()
             if password_id is not None:
-                # history_cursor.
                 cursor.execute("SELECT timestamp, password FROM password_history WHERE password_id=? ORDER BY timestamp DESC",
                                     (password_id,))
-                history = cursor.fetchall() #history_cursor.fetchall()
-
+                history = cursor.fetchall() 
+                
                 # Display history in a new window
                 history_window = tk.Toplevel(self.master)
                 history_window.title("Password History")
