@@ -26,6 +26,12 @@ This is a simple offline password manager application built using Python and the
     ```bash
     python password-manager.py
     ```
+    **OR** <br/>
+Run the bash script
+    ```bash
+    chmod +x run_app.sh
+    ./run_app.sh
+    ```
 ## Features
 
 - **Add Password:** Store passwords for different services securely.
