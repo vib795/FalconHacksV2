@@ -281,7 +281,7 @@ class PasswordManagerApp:
         try:
             length = simpledialog.askinteger("Password Generator", "Enter password length:")
             if length:
-                complexity = simpledialog.askstring("Password Generator", "Enter password complexity (low, medium, high):")
+                complexity = simpledialog.askstring("Password Generator", "Enter password complexity (low, medium, high):").lower()
                 if complexity in ['low', 'medium', 'high']:
                     password = self.generate_random_password(length, complexity)
                     
