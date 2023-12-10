@@ -338,14 +338,9 @@ class PasswordManagerApp:
                 cursor.execute("UPDATE passwords SET password=? WHERE id=?", (new_encrypted_password, password_id))
                 conn.commit()
 
-                # Save the previous and new password to history
-                # history_cursor.
-                cursor.execute("INSERT INTO password_history (password_id, password) VALUES (?, ?)",
-                                    (password_id, current_encrypted_password))
-                # history_cursor.
+                # Save the new password to history
                 cursor.execute("INSERT INTO password_history (password_id, password) VALUES (?, ?)",
                                     (password_id, new_encrypted_password))
-                # history_conn.
                 conn.commit()
 
                 messagebox.showinfo("Success", "Password updated successfully!")

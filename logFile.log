@@ -1,0 +1,1 @@
+2023-12-09 21:15:43,653 - __main__ - ERROR - Error in __init__. Error loading app. 'PasswordManagerApp' object has no attribute 'show_password_history'
