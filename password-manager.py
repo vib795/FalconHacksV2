@@ -35,7 +35,7 @@ try:
     cipher_suite = Fernet(key)
 except Exception as e:
     logger.error(f"Error occurred in loading the encryption key fpr the app.")
-    raise Exception
+    raise Exception from e
 
 try:
     db_filename = "passwords.db"
@@ -57,7 +57,7 @@ try:
     conn.commit()
 except Exception as e:
     logger.error(f"An error occurred while creating tables in the DB. {str(e)}")
-    raise Exception
+    raise Exception from e
 
 
 def encrypt_data(data):
@@ -65,14 +65,14 @@ def encrypt_data(data):
         return cipher_suite.encrypt(data.encode())
     except Exception as e:
         logger.error(f"An error occurred in encrypting your password. {str(e)}")
-        raise Exception
+        raise Exception from e
     
 def decrypt_data(data):
     try:
         return cipher_suite.decrypt(data).decode()
     except Exception as e:
         logger.error(f"An error occurred while decrypting your password. {str(e)}")
-        raise Exception
+        raise Exception from e
 
 def save_password(service, username, password):
     try:
@@ -82,7 +82,7 @@ def save_password(service, username, password):
         conn.commit()
     except Exception as e:
         logger.error(f"An error occurred in inserting password to the current password table. {str(e)}")
-        raise Exception
+        raise Exception from e
     try:
         # Save to history
         password_id = cursor.lastrowid
@@ -91,7 +91,7 @@ def save_password(service, username, password):
         conn.commit()
     except Exception as e:
         logger.error(f"An error occurred in inserting password to the history password table. {str(e)}")
-        raise Exception
+        raise Exception from e
 
 def get_passwords():
     try:
@@ -110,13 +110,13 @@ def delete_password(password_id):
         conn.commit()
     except Exception as e:
         logger.error(f"An error occurred during password delete for {password_id}. Error occurred in updating history of the {password_id}. {str(e)}")
-        raise Exception
+        raise Exception from e
     try:
         cursor.execute("DELETE FROM passwords WHERE id=?", (password_id,))
         conn.commit()
     except Exception as e:
         logger.error(f"An error occurred in deleting password from the DB. {str(e)}")
-        raise Exception
+        raise Exception from e
 
 class PasswordManagerApp:
     def __init__(self, master):
@@ -169,7 +169,7 @@ class PasswordManagerApp:
             self.view_passwords()
         except Exception as e:
             logger.error(f"Error in __init__. Error loading app. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def view_password(self):
         try:
@@ -202,7 +202,7 @@ class PasswordManagerApp:
             tk.Button(password_window, text="Close", command=password_window.destroy, font=("Helvetica", 12)).pack(pady=10)
         except Exception as e:
             logger.error(f"An error occurred in the view_password method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def add_password(self):
         try:
@@ -219,7 +219,7 @@ class PasswordManagerApp:
                 messagebox.showwarning("Warning", "Please fill in all fields.")
         except Exception as e:
             logger.error(f"An error occurred in the add_password method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def view_passwords(self):
         try:
@@ -253,7 +253,7 @@ class PasswordManagerApp:
             pyperclip.copy(decrypted_password)
         except Exception as e:
             logger.error(f"An error occurred in the view_passwords method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def delete_password_prompt(self):
         try:
@@ -275,7 +275,7 @@ class PasswordManagerApp:
                 self.view_passwords()
         except Exception as e:
             logger.error(f"An error occurred in the delete_password_prompt method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def generate_password(self):
         try:
@@ -300,7 +300,7 @@ class PasswordManagerApp:
                     messagebox.showwarning("Warning", "Invalid complexity level. Please choose low, medium, or high.")
         except Exception as e:
             logger.error(f"An error occurred in the generate_password method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def generate_random_password(self, length, complexity):
         try:
@@ -319,7 +319,7 @@ class PasswordManagerApp:
             return password
         except Exception as e:
             logger.error(f"An error occurred in the generate_random_password method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def update_password(self):
         try:
@@ -354,7 +354,7 @@ class PasswordManagerApp:
                 self.view_passwords()
         except Exception as e:
             logger.error(f"An error occurred in the update_password method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
     def show_password_history(self):
         try:
@@ -402,7 +402,7 @@ class PasswordManagerApp:
                     tree.insert("", "end", values=(timestamp_local_str, decrypted_password))
         except Exception as e:
             logger.error(f"An error occurred in show_password_history method. {str(e)}")
-            raise Exception
+            raise Exception from e
             
     def get_selected_password_id(self):
         try:
@@ -415,7 +415,7 @@ class PasswordManagerApp:
             return self.tree.item(selected_item, "values")[0]
         except Exception as e:
             logger.error(f"An error occurred in the get_selected_password_id method. {str(e)}")
-            raise Exception
+            raise Exception from e
 
 
 if __name__ == "__main__":
