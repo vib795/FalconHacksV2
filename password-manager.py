@@ -122,7 +122,7 @@ class PasswordManagerApp:
     def __init__(self, master):
         try:
             self.master = master
-            master.title("Password Manager")
+            master.title("Offline Password Manager")
             # Set the application icon using an ICO file
             icon_path = "icon.ico"  # Replace with the actual path to your ICO file
             master.iconphoto(True, tk.PhotoImage(file=icon_path))
