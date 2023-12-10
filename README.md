@@ -116,7 +116,7 @@ cd dist
 
 7. Run the following command to create a DMG file:
 ```bash
-create-dmg 'Password Manager App.app' --overwrite --dmg-title='Password Manager App'
+create-dmg 'Offline Password Manager App.app' --overwrite --dmg-title='Offline Password Manager App'
 ```
 Adjust the `--dmg-title` parameter according to your application's name.
 
