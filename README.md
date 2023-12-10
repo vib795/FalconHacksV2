@@ -24,14 +24,20 @@ This is a simple offline password manager application built using Python and the
 
 3. Run the script
     ```bash
-    python password-manager.py
+    python3 password-manager.py
     ```
     **OR** <br/>
-Run the bash script
+4. Run the bash script - **_ON Linux systems or MacOS_**
     ```bash
     chmod +x run_app.sh
     ./run_app.sh
     ```
+    **OR**<br/>
+5. Run the bat file - **_ON Windows_**
+    ```bash
+    run_app.bat
+    ```
+
 ## Features
 
 - **Add Password:** Store passwords for different services securely.
