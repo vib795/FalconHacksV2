@@ -1,6 +1,6 @@
 altgraph==0.17.4
 cffi==1.16.0
-cryptography==41.0.5
+cryptography>=41.0.6
 importlib-metadata==6.8.0
 packaging==23.2
 password-strength==0.0.3.post2
