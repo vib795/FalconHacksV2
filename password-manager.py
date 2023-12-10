@@ -1,3 +1,4 @@
+#################### IMPORTS #####################
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from cryptography.fernet import Fernet
@@ -6,8 +7,12 @@ import secrets
 import os
 import pyperclip
 import logging
+import pytz
+from datetime import datetime
+from tzlocal import get_localzone
+#################### IMPORTS #####################
 
-logging.basicConfig(level=logging.DEBUG, 
+logging.basicConfig(level=logging.INFO, 
                     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                     handlers=[
                         logging.StreamHandler(),
@@ -359,7 +364,7 @@ class PasswordManagerApp:
                 cursor.execute("SELECT timestamp, password FROM password_history WHERE password_id=? ORDER BY timestamp DESC",
                                     (password_id,))
                 history = cursor.fetchall() 
-                
+
                 # Display history in a new window
                 history_window = tk.Toplevel(self.master)
                 history_window.title("Password History")
@@ -384,12 +389,21 @@ class PasswordManagerApp:
 
                 # Populate the Treeview with history
                 for entry in history:
+                    timestamp_str = entry[0]
                     decrypted_password = decrypt_data(entry[1])
-                    tree.insert("", "end", values=(entry[0], decrypted_password))
+
+                    # Convert the timestamp to a datetime object
+                    timestamp_utc = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+                    # Convert UTC time to the local time of the user
+                    local_timezone = get_localzone()
+                    timestamp_local = timestamp_utc.replace(tzinfo=pytz.utc).astimezone(local_timezone)
+                    timestamp_local_str = timestamp_local.strftime('%Y-%m-%d %H:%M:%S %Z')
+
+                    tree.insert("", "end", values=(timestamp_local_str, decrypted_password))
         except Exception as e:
             logger.error(f"An error occurred in show_password_history method. {str(e)}")
             raise Exception
-
+            
     def get_selected_password_id(self):
         try:
             selected_item = self.tree.selection()

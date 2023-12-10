@@ -1,1 +1,14 @@
-2023-12-09 21:15:43,653 - __main__ - ERROR - Error in __init__. Error loading app. 'PasswordManagerApp' object has no attribute 'show_password_history'
+2023-12-10 09:45:47,305 - tzlocal - DEBUG - 1 found:
+ {'/etc/timezone': 'Etc/UTC'}
+2023-12-10 09:47:51,749 - tzlocal - DEBUG - /etc/timezone found, contents:
+ America/Chicago
+
+2023-12-10 09:47:51,749 - tzlocal - DEBUG - /etc/localtime found
+2023-12-10 09:47:51,751 - tzlocal - DEBUG - 2 found:
+ {'/etc/timezone': 'America/Chicago', '/etc/localtime is a symlink to': 'America/Chicago'}
+2023-12-10 09:49:29,474 - tzlocal - DEBUG - /etc/timezone found, contents:
+ America/Chicago
+
+2023-12-10 09:49:29,474 - tzlocal - DEBUG - /etc/localtime found
+2023-12-10 09:49:29,476 - tzlocal - DEBUG - 2 found:
+ {'/etc/timezone': 'America/Chicago', '/etc/localtime is a symlink to': 'America/Chicago'}
